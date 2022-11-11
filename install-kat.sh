@@ -18,6 +18,7 @@ http://*)
         echo "
         $0 HTTPS_PROXY
                 example: $0 http://192.168.0.109:808
+                curl -sfL https://gitee.com/slcnx/tools/raw/master/install-kat.sh | sed  's/\r//' |  bash -s -- http://192.168.0.109:808
         "
         exit
         ;;
