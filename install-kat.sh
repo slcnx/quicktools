@@ -129,3 +129,13 @@ fi
 color "* 安装tkn" 0
 unset https_proxy
 tkn version -n tekton-pipelines
+
+
+kn completion bash > /etc/profile.d/kn.sh && color "安装命令行补全kn" 0 || color "未安装命令行补全kn" 1
+kn admin completion bash > /etc/profile.d/kn-admin.sh && color "安装命令行补全kn admin" 0|| color "未安装命令行补全kn admin" 1
+kn func completion bash > /etc/profile.d/kn-func.sh && color "安装命令行补全kn func" 0 || color "未安装命令行补全kn func" 1
+kustomize completion bash > /etc/profile.d/completion.sh && color "安装命令行补全kustomize" 0 || color "未安装命令行补全kustomize" 1
+kubectl  completion bash > /etc/profile.d/kubectl.sh && color "安装命令行补全kubectl" 0 || color "未安装命令行补全kubectl" 1
+argocd  completion bash > /etc/profile.d/argocd.sh && color "安装命令行补全argocd" 0 || color "未安装命令行补全argocd" 1
+helm  completion bash > /etc/profile.d/helm.sh && color "安装命令行补全helm" 0 || color "未安装命令行补全helm" 1
+tkn completion bash > /etc/profile.d/tkn.sh && color "安装命令行补全tkn" 0 || color "未安装命令行补全tkn" 1
