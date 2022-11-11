@@ -17,6 +17,7 @@ info() {
        example: $0 -a 192.168.13.103:33000
 
     2) $0 -d 删除代理
+        example: curl -sfL https://gitee.com/slcnx/tools/raw/master/add-docker-proxy.sh | sed  's/\r//' |  bash -s -- -d
   "
   exit
 
