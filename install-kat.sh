@@ -127,9 +127,14 @@ wget https://github.com/tektoncd/cli/releases/download/v0.26.1/tektoncd-cli-0.26
 dpkg -i tektoncd-cli-0.26.1_Linux-64bit.deb
 fi
 color "* 安装tkn" 0
-unset https_proxy
 tkn version -n tekton-pipelines
 
+if ! which istioctl &>/dev/null; then
+curl -L https://istio.io/downloadIstio | sh -
+install istio-*/bin/istioctl /usr/local/bin/
+fi
+color "* 安装istioctl" 0
+istioctl version
 
 kn completion bash > /etc/profile.d/kn.sh && color "安装命令行补全kn" 0 || color "未安装命令行补全kn" 1
 kn admin completion bash > /etc/profile.d/kn-admin.sh && color "安装命令行补全kn admin" 0|| color "未安装命令行补全kn admin" 1
@@ -139,3 +144,4 @@ kubectl  completion bash > /etc/profile.d/kubectl.sh && color "安装命令行�
 argocd  completion bash > /etc/profile.d/argocd.sh && color "安装命令行补全argocd" 0 || color "未安装命令行补全argocd" 1
 helm  completion bash > /etc/profile.d/helm.sh && color "安装命令行补全helm" 0 || color "未安装命令行补全helm" 1
 tkn completion bash > /etc/profile.d/tkn.sh && color "安装命令行补全tkn" 0 || color "未安装命令行补全tkn" 1
+istioctl completion bash > /etc/profile.d/istioctl.sh && color "安装命令行补全istioctl" 0 || color "未安装命令行补全istioctl" 1
