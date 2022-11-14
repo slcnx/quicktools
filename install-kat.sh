@@ -55,11 +55,28 @@ esac
 
 
 
+source /etc/os-release
+if [ $ID = "centos" ]; then
+  is_centos=1
+else
+  is_centos=0
+fi
+
+
 if ! which docker &>/dev/null; then
+    if [ $is_centos -eq 0 ]; then
         curl -sSfL https://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker.gpg
         echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker.gpg]  https://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker-ce.list
         apt update
         apt install docker-ce -y
+    else
+       yum remove docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine
+       yum install -y yum-utils device-mapper-persistent-data lvm2
+       yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+       sed -i 's+download.docker.com+mirrors.tuna.tsinghua.edu.cn/docker-ce+' /etc/yum.repos.d/docker-ce.repo
+       yum makecache fast
+       yum install docker-ce
+    fi
 fi
 color "* 安装docker-ce" 0
 docker version
