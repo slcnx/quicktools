@@ -120,10 +120,6 @@ fi
 color "* 安装kubectl" 0
 kubectl version
 
-if ! [ -f ~/.kube/config ]; then
-        chmod 400 ~/.kube/config || color "* 安装kubeconfig" 1; exit
-fi
-color "* 安装kubeconfig" 0
 
 if ! which argocd &>/dev/null; then
 wget https://github.com/argoproj/argo-cd/releases/download/v2.5.2/argocd-linux-amd64
@@ -140,8 +136,13 @@ color "* 安装helm" 0
 helm version
 
 if ! which tkn &>/dev/null; then
-wget https://github.com/tektoncd/cli/releases/download/v0.26.1/tektoncd-cli-0.26.1_Linux-64bit.deb
-dpkg -i tektoncd-cli-0.26.1_Linux-64bit.deb
+    if [ $is_centos -eq 0 ]; then
+      wget https://github.com/tektoncd/cli/releases/download/v0.26.1/tektoncd-cli-0.26.1_Linux-64bit.deb
+      dpkg -i tektoncd-cli-0.26.1_Linux-64bit.deb
+    else
+      wget https://github.com/tektoncd/cli/releases/download/v0.26.1/tektoncd-cli-0.26.1_Linux-64bit.rpm
+      rpm -ivh tektoncd-cli-0.26.1_Linux-64bit.rpm
+    fi
 fi
 color "* 安装tkn" 0
 tkn version -n tekton-pipelines
@@ -153,6 +154,7 @@ fi
 color "* 安装istioctl" 0
 istioctl version
 
+
 kn completion bash > /etc/profile.d/kn.sh && color "安装命令行补全kn" 0 || color "未安装命令行补全kn" 1
 kn admin completion bash > /etc/profile.d/kn-admin.sh && color "安装命令行补全kn admin" 0|| color "未安装命令行补全kn admin" 1
 kn func completion bash > /etc/profile.d/kn-func.sh && color "安装命令行补全kn func" 0 || color "未安装命令行补全kn func" 1
@@ -162,3 +164,8 @@ argocd  completion bash > /etc/profile.d/argocd.sh && color "安装命令行补�
 helm  completion bash > /etc/profile.d/helm.sh && color "安装命令行补全helm" 0 || color "未安装命令行补全helm" 1
 tkn completion bash > /etc/profile.d/tkn.sh && color "安装命令行补全tkn" 0 || color "未安装命令行补全tkn" 1
 istioctl completion bash > /etc/profile.d/istioctl.sh && color "安装命令行补全istioctl" 0 || color "未安装命令行补全istioctl" 1
+
+if ! [ -f ~/.kube/config ]; then
+        chmod 400 ~/.kube/config || color "* 安装kubeconfig" 1; exit
+fi
+color "* 安装kubeconfig" 0
