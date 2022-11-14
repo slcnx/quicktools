@@ -95,6 +95,13 @@ fi
 color "* 安装kn-admin" 0
 kn admin version
 
+if ! which kn-quickstart &>/dev/null; then
+wget https://github.com/knative-sandbox/kn-plugin-quickstart/releases/download/knative-v1.8.0/kn-quickstart-linux-amd64
+install kn-quickstart-linux-amd64  /usr/local/bin/kn-quickstart
+fi
+color "* 安装kn-quickstart" 0
+kn quickstart version
+
 if ! which kustomize &>/dev/null; then
 wget https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.7/kustomize_v4.5.7_linux_amd64.tar.gz
 tar xvf kustomize_v4.5.7_linux_amd64.tar.gz
@@ -157,6 +164,7 @@ istioctl version
 
 kn completion bash > /etc/profile.d/kn.sh && color "安装命令行补全kn" 0 || color "未安装命令行补全kn" 1
 kn admin completion bash > /etc/profile.d/kn-admin.sh && color "安装命令行补全kn admin" 0|| color "未安装命令行补全kn admin" 1
+kn quickstart completion bash > /etc/profile.d/kn-quickstart.sh && color "安装命令行补全kn quickstart" 0|| color "未安装命令行补全kn quickstart" 1
 kn func completion bash > /etc/profile.d/kn-func.sh && color "安装命令行补全kn func" 0 || color "未安装命令行补全kn func" 1
 kustomize completion bash > /etc/profile.d/completion.sh && color "安装命令行补全kustomize" 0 || color "未安装命令行补全kustomize" 1
 kubectl  completion bash > /etc/profile.d/kubectl.sh && color "安装命令行补全kubectl" 0 || color "未安装命令行补全kubectl" 1
