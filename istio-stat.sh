@@ -6,9 +6,11 @@
 #Date:                  2022-12-01
 #FileName：             stat.sh
 #URL:                   http://blog.mykernel.cn
-#Description：          A test toy
+#Description：           curl -sSL https://gitee.com/slcnx/tools/raw/master/istio-stat.sh | sed 's@\r@@' | bash
 #Copyright (C):        2022 All rights reserved
 #********************************************************************
+
+
 set -e
 
 
