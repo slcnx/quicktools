@@ -11,8 +11,6 @@
 #********************************************************************
 
 
-set -e
-
 
 # select command
 function sc() {
@@ -34,6 +32,7 @@ select cmd in "${cmds[@]}"; do
     break
   fi
 done
+return
 }
 
 # select pod
@@ -46,8 +45,12 @@ PS3="enter a pod: "
 select pod in "${pods[@]}"; do
   echo $pod
   sc $pod
+  break
 done
+return
 }
 
 
+while true; do
 sp
+done
