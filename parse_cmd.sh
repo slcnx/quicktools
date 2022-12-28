@@ -123,6 +123,7 @@ for key in ${!array[@]}; do
   fi
 done
 if [ $FLAG -eq 1 ]; then
+  echo "-h|--help 可以获取帮助"
   exit
 fi
 }
