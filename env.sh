@@ -39,13 +39,13 @@ color () {
     echo -n "["
     if [ $2 = "success" -o $2 = "0" ] ;then
         ${SETCOLOR_SUCCESS}
-        echo -n $"  OK  "
+        echo -n "  OK  "
     elif [ $2 = "failure" -o $2 = "1"  ] ;then
         ${SETCOLOR_FAILURE}
-        echo -n $"FAILED"
+        echo -n "FAILED"
     else
         ${SETCOLOR_WARNING}
-        echo -n $"WARNING"
+        echo -n "WARNING"
     fi
     ${SETCOLOR_NORMAL}
     echo -n "]"
