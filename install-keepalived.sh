@@ -55,7 +55,7 @@ vrrp_instance VI_1 {
     state $STATE
     interface $IFACE
     virtual_router_id $ROUTEID
-    nopreempt
+    #nopreempt
     priority $PRIORITY
     advert_int 1
     virtual_ipaddress {
