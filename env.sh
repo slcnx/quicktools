@@ -20,11 +20,16 @@ is_ubuntu() {
 
 # ${CB}蓝色${CE}
 # ${CR}红色色${CE}
-CB="echo -en \\033[1;32m"
+CG="echo -en \\033[1;32m"
 CR="echo -en \\033[1;31m"
 CE="\033[m"
 
-
+green() {
+    ${CG}$1${CE} 
+}
+red() {
+    ${CR}$1${CE} 
+}
 
 # color "这是成功的消息" 0
 # color "这是失败的消息" 1
