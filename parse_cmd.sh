@@ -128,7 +128,7 @@ fi
 }
 
 #使用方法
-#source <(curl -sSLf https://gitee.com/slcnx/tools/raw/master/parse.sh |     sed 's/\r//g')
+#source <(curl -sSLf https://gitee.com/slcnx/tools/raw/master/parse_cmd.sh |     sed 's/\r//g')
 #CONFIG='
 #  key        value      desc
 #  -s|--state STATE      MASTER|BACKUP
