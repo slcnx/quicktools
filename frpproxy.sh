@@ -13,8 +13,8 @@
 source <(curl -sSLf https://gitee.com/slcnx/tools/raw/master/parse_cmd.sh |     sed 's/\r//g')
 CONFIG='
   key              value         desc
-  -l|--local-port  LOCALPORT     本地的端口, 3000 or 3000-3020
-  -r|--remote-port REMOTEPORT    远程的端口, 3000 or 3000-3020
+  -l|--local-port  LOCALPORT     本地的端口, 3000 or 3000-3020 or 3000,4000
+  -r|--remote-port REMOTEPORT    远程的端口, 3000 or 3000-3020 or 5000,6000
   -s|--server-addr  SERVERADDR       服务程序的ip/domain huaweicloud.mykernel.cn
   -b|--bind-port    BINDPORT      服务器绑定端口, 7000
   --dashboard-port   DASHBOARDPORT 7001
@@ -53,14 +53,31 @@ case $LOCALPORT in
 *-*)
   start_num=${LOCALPORT%-*}
   end=${LOCALPORT#*-}
-  echo $start $end
   for port in $(seq $start_num $end); do
       NAME=$(openssl rand -base64 3) # 3 * 8 / 6 = 4 位
       echo "docker run --restart always -d  --name frpc.$NAME --net host slcnx/frp:latest frpc tcp --local_port $port   --remote_port $port --server_addr $SERVERADDR --token $TOKEN --uc --ue --tls_enable  --proxy_name frpc.$NAME"
   done
   ;;
 *)
-  echo "docker run --restart always -d  --name frpc.$NAME --net host slcnx/frp:latest frpc tcp --local_port $LOCALPORT   --remote_port $REMOTEPORT --server_addr $SERVERADDRPORT --token $TOKEN --uc --ue --tls_enable  --proxy_name frpc.$NAME"
+  if [[ $LOCALPORT =~ .*,.* ]] || [[ $REMOTEPORT =~ .*,.* ]]; then
+    # 多个本地端口
+    localports=($(echo $LOCALPORT | xargs -d, -n1))
+    localports_len=${#localports[@]}
+    remoteports=($(echo $REMOTEPORT | xargs -d, -n1))
+    remoteports_len=${#remoteports[@]}
+    if [ $localports_len -ne $remoteports_len ]; then
+      echo "$LOCALPORT $REMOTEPORT 格式不对，应该是一一对应. 300,400 --> 300,600"
+      exit
+    fi
+
+
+    for i in $(seq 0 $[$localports_len-1]); do
+      echo "docker run --restart always -d  --name frpc.$NAME --net host slcnx/frp:latest frpc tcp --local_port ${localports[$i]}   --remote_port ${remoteports[$i]} --server_addr $SERVERADDRPORT --token $TOKEN --uc --ue--tls_enable  --proxy_name frpc.$NAME"
+    done
+  else
+    echo "docker run --restart always -d  --name frpc.$NAME --net host slcnx/frp:latest frpc tcp --local_port $LOCALPORT   --remote_port $REMOTEPORT --server_addr $SERVERADDRPORT --token $TOKEN --uc --ue --tls_enable  --proxy_name frpc.$NAME"
+  fi
+
   ;;
 esac
 
