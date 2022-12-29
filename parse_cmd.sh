@@ -10,6 +10,8 @@
 #Copyright (C):        2022 All rights reserved
 #********************************************************************
 set -e
+
+# 长选项 
 function pl() {
     local key=${1##--}
     suffix=":"
@@ -17,6 +19,8 @@ function pl() {
     LONG=${LONG}${key}${suffix},
     echo $LONG
 }
+
+# 短选项 
 function ps() {
     local key=${1##-}
     suffix=":"
@@ -25,6 +29,8 @@ function ps() {
     echo $SHORT
 }
 
+
+# 解析命令行
 function parse_cmd() {
 eval set -- $*
 
