@@ -17,6 +17,14 @@ git clone https://gitee.com/slcnx/tools
 写脚本需要有颜色输出
 ```
 source <(curl -sSLf https://gitee.com/slcnx/tools/raw/master/env.sh | sed 's/\r//g')
+
+green 123
+red 123
+
+
+color 123 1
+color 123 0
+
 ```
 
 写脚本需要参数解析
