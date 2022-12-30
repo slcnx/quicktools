@@ -201,3 +201,6 @@ fi
 ## 输出结果
 #echo $STATE $IFACE $ROUTEID $PRIORITY $ADDR $OUTPUT
 # getflag -d 获取 -d flag的状态 1有。默认0没有。
+
+# 当opt_is_empty打开时，可以强制要求变量非空
+# check_empty STATE IFACE  ROUTEID  PRIORITY ADDR
