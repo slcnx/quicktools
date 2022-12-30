@@ -177,7 +177,9 @@ fi
 #          --route-id,              ROUTEID,                    0,                1-255
 #                  -p,             PRIORITY,                    0,                0-100
 #              --addr,                 ADDR,                    0,      192.168.1.10/24
+#                  -d,                     ,                    1,       是否删除？
 #'
 #parse_cmd $@
 ## 输出结果
 #echo $STATE $IFACE $ROUTEID $PRIORITY $ADDR $OUTPUT
+# getflag -d 获取 -d flag的状态 1有。默认0没有。
