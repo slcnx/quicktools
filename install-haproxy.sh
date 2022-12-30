@@ -1,12 +1,12 @@
 source <(curl -sSLf https://gitee.com/slcnx/tools/raw/master/parse_cmd.sh | sed 's/\r//g')
 CONFIG='
-  key        value      desc
-  --admin-port    ADMINPORT 9999
-  --admin-user    ADMINUSER  admin
-  --admin-pass    ADMINPASS  123456
-  --ip            BINDIP     172.20.0.248:80
-  --web1          WEB1       172.20.0.201:80
-  --web2          WEB2       172.20.0.202:80
+                 key,             argument,         opt_is_empty,                 desc
+  --admin-port  , ADMINPORT ,0,9999
+  --admin-user  , ADMINUSER ,0, admin
+  --admin-pass  , ADMINPASS ,0, 123456
+  --ip          , BINDIP    ,0, 172.20.0.248:80
+  --web1        , WEB1      ,0, 172.20.0.201:80
+  --web2        , WEB2      ,0, 172.20.0.202:80
 '
 parse_cmd $@
 # 输出结果
