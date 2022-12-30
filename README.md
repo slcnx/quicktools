@@ -8,16 +8,35 @@
 
 
 #### 安装教程
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
+```
+git clone https://gitee.com/slcnx/tools
+```
 
 #### 使用说明
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+写脚本需要有颜色输出
+```
+source <(curl -sSLf https://gitee.com/slcnx/tools/raw/master/env.sh | sed 's/\r//g')
+```
+
+写脚本需要参数解析
+```
+source <(curl -sSLf https://gitee.com/slcnx/tools/raw/master/parse_cmd.sh |     sed 's/\r//g')
+CONFIG='
+key,             argument,         opt_is_empty,                 desc
+  -l|--local-port , LOCALPORT           ,0,         本地的端口, 3000 or 3000-3020 or 3000,4000
+  -r|--remote-port, REMOTEPORT          ,0,       远程的端口, 3000 or 3000-3020 or 5000,6000
+  -s|--server-addr,  SERVERADDR         ,0,        服务程序的ip/domain huaweicloud.mykernel.cn
+  -b|--bind-port  ,  BINDPORT           ,0,        服务器绑定端口, 7000
+  --dashboard-port,   DASHBOARDPORT     ,0,        7001
+  --dashboard-user,   DASHBOARDUSER     ,0,        admin
+  --dashboard-pwd ,   DASHBOARDUSERPWD  ,0,        123456
+  --suffix ,            NAME            ,1,        指定随机后缀, 可选，默认随机
+  --token  ,            TOKEN           ,1,        指定token, 可选，默认随机
+'
+parse_cmd $@
+
+```
 
 #### 参与贡献
 
