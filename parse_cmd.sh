@@ -11,6 +11,14 @@
 #********************************************************************
 set -e
 
+# 获取flag对应的值
+function getflag() {
+   local flag=$(echo "$1" | base64 | tr -d '[0-9+/]')
+   echo ${!flag}
+}
+#getflag "-d"
+
+
 # 长选项
 function pl() {
     local key=${1##--}
