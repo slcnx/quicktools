@@ -74,7 +74,7 @@ case $LOCALPORT in
 
 
     for i in $(seq 0 $[$localports_len-1]); do
-      echo "docker run --restart always -d  --name frpc.$NAME --net host slcnx/frp:latest frpc tcp --local_port ${localports[$i]}   --remote_port ${remoteports[$i]} --server_addr $SERVERADDRPORT --token $TOKEN --uc --ue--tls_enable  --proxy_name frpc.$NAME"
+      echo "docker run --restart always -d  --name frpc.$NAME --net host slcnx/frp:latest frpc tcp --local_port ${localports[$i]}   --remote_port ${remoteports[$i]} --server_addr $SERVERADDRPORT --token $TOKEN --uc --ue --tls_enable  --proxy_name frpc.$NAME"
     done
   else
     echo "docker run --restart always -d  --name frpc.$NAME --net host slcnx/frp:latest frpc tcp --local_port $LOCALPORT   --remote_port $REMOTEPORT --server_addr $SERVERADDRPORT --token $TOKEN --uc --ue --tls_enable  --proxy_name frpc.$NAME"
