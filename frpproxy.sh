@@ -12,14 +12,14 @@
 # --local 3000 --remote 3001
 source <(curl -sSLf https://gitee.com/slcnx/tools/raw/master/parse_cmd.sh |     sed 's/\r//g')
 CONFIG='
-  key              value         desc
-  -l|--local-port  LOCALPORT     本地的端口, 3000 or 3000-3020 or 3000,4000
-  -r|--remote-port REMOTEPORT    远程的端口, 3000 or 3000-3020 or 5000,6000
-  -s|--server-addr  SERVERADDR       服务程序的ip/domain huaweicloud.mykernel.cn
-  -b|--bind-port    BINDPORT      服务器绑定端口, 7000
-  --dashboard-port   DASHBOARDPORT 7001
-  --dashboard-user   DASHBOARDUSER  admin
-  --dashboard-pwd    DASHBOARDUSERPWD 123456
+key,             argument,         opt_is_empty,                 desc
+  -l|--local-port , LOCALPORT           ,0,         本地的端口, 3000 or 3000-3020 or 3000,4000
+  -r|--remote-port, REMOTEPORT          ,0,       远程的端口, 3000 or 3000-3020 or 5000,6000
+  -s|--server-addr,  SERVERADDR         ,0,        服务程序的ip/domain huaweicloud.mykernel.cn
+  -b|--bind-port  ,  BINDPORT           ,0,        服务器绑定端口, 7000
+  --dashboard-port,   DASHBOARDPORT     ,0,        7001
+  --dashboard-user,   DASHBOARDUSER     ,0,        admin
+  --dashboard-pwd ,   DASHBOARDUSERPWD  ,0,        123456
 
 '
 parse_cmd $@
