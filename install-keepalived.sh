@@ -13,12 +13,12 @@
 #使用方法
 source <(curl -sSLf https://gitee.com/slcnx/tools/raw/master/parse_cmd.sh | sed 's/\r//g')
 CONFIG='
-  key        value      desc
-  -s|--state STATE      MASTER|BACKUP,keepalived角色
-  -i|--iface IFACE      eth0,外网接口
-  --route-id ROUTEID    1-255,路由id
-  -p         PRIORITY   0-100,优先级
-  --addr     ADDR       192.168.1.10/24,VIP地址
+   key,             argument,         opt_is_empty,                 desc
+  -s|--state ,STATE     ,0, MASTER|BACKUP,keepalived角色
+  -i|--iface ,IFACE     ,0, eth0,外网接口
+  --route-id ,ROUTEID   ,0, 1-255,路由id
+  -p         ,PRIORITY  ,0, 0-100,优先级
+  --addr     ,ADDR      ,0, 192.168.1.10/24,VIP地址
 '
 parse_cmd $@
 # 输出结果
