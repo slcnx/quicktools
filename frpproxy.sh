@@ -6,7 +6,7 @@
 #Date:                  2022-12-29
 #FileName：             frpproxy.sh
 #URL:                   http://blog.mykernel.cn
-#Description：          curl -sSLf https://gitee.com/slcnx/tools/raw/master/frpproxy.sh |     sed 's/\r//g' | bash -s --  --local-port 3000 --remote-port  3001 --server-addr huaweicloud.mykernel.cn --bind-port 7000 --dashboard-port 7001 --dashboard-user admin --dashboard-pwd 0vkT8HCw7ChBbFPR
+#Description：          curl -sSLf https://gitee.com/slcnx/tools/raw/master/frpproxy.sh |     sed 's/\r//g' | bash -s --  --local-port 3000 --remote-port 3001 --server-addr huaweicloud.mykernel.cn --bind-port 7000 --dashboard-port 7001 --dashboard-user admin --dashboard-pwd 0vkT8HCw7ChBbFPR
 #Copyright (C):        2022 All rights reserved
 #********************************************************************
 # --local 3000 --remote 3001
@@ -20,7 +20,8 @@ key,             argument,         opt_is_empty,                 desc
   --dashboard-port,   DASHBOARDPORT     ,0,        7001
   --dashboard-user,   DASHBOARDUSER     ,0,        admin
   --dashboard-pwd ,   DASHBOARDUSERPWD  ,0,        123456
-
+  --suffix ,            NAME            ,1,        指定随机后缀, 可选，默认随机
+  --token  ,            TOKEN           ,1,        指定token, 可选，默认随机
 '
 parse_cmd $@
 # 输出结果
@@ -36,10 +37,11 @@ SERVERADDRPORT=$(echo $SERVERADDR:$BINDPORT)
 
 
 
-NAME=$(openssl rand -base64 3) # 3 * 8 / 6 = 4 位
-TOKEN=$(openssl rand -hex 6) # 6 * 8 / 4 = 12 位
+: ${NAME:=$(openssl rand -base64 3)} # 3 * 8 / 6 = 4 位
+: ${TOKEN:=$(openssl rand -hex 6)} # 6 * 8 / 4 = 12 位
 
 cat <<EOF
+########################### start ###########################
 #server: $SERVERADDR install
 
 docker run --restart always -d --name frps.$NAME --net host slcnx/frp:latest frps --bind_port $BINDPORT --dashboard_port $DASHBOARDPORT --dashboard_user $DASHBOARDUSER --dashboard_pwd $DASHBOARDUSERPWD --disable_log_color --token $TOKEN --tls_only
@@ -55,7 +57,7 @@ case $LOCALPORT in
   end=${LOCALPORT#*-}
   for port in $(seq $start_num $end); do
       NAME=$(openssl rand -base64 3) # 3 * 8 / 6 = 4 位
-      echo "docker run --restart always -d  --name frpc.$NAME --net host slcnx/frp:latest frpc tcp --local_port $port   --remote_port $port --server_addr $SERVERADDR --token $TOKEN --uc --ue --tls_enable  --proxy_name frpc.$NAME"
+      echo "docker run --restart always -d  --name frpc.$NAME --net host slcnx/frp:latest frpc tcp --local_port $port   --remote_port $port --server_addr$SERVERADDR --token $TOKEN --uc --ue --tls_enable  --proxy_name frpc.$NAME"
   done
   ;;
 *)
