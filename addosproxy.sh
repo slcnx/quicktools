@@ -38,14 +38,14 @@ check_empty YOURPROXYADDRESS YOURPROXYPORT  INTERFACE
 YOUR_ACTUAL_IP=$( ip addr show dev $INTERFACE | grep "global $INTERFACE" | tr -s ' ' | cut -d' ' -f3)
 LOCALNET=$(ipcalc $YOUR_ACTUAL_IP -n | awk '/Network/{print $2}')
 tee -a /etc/environment <<EOF
-export http_proxy="$YOURPROXYADDRESS:$YOURPROXYPORT"
-export https_proxy="$YOURPROXYADDRESS:$YOURPROXYPORT"
-export ftp_proxy="$YOURPROXYADDRESS:$YOURPROXYPORT"
+export http_proxy="http://$YOURPROXYADDRESS:$YOURPROXYPORT"
+export https_proxy="http://$YOURPROXYADDRESS:$YOURPROXYPORT"
+export ftp_proxy="http://$YOURPROXYADDRESS:$YOURPROXYPORT"
 export no_proxy="localhost,127.0.0.1,.svc.cluster.local,$LOCALNET"
 
-export HTTP_PROXY="$YOURPROXYADDRESS:$YOURPROXYPORT"
-export HTTPS_PROXY="$YOURPROXYADDRESS:$YOURPROXYPORT"
-export FTP_PROXY="$YOURPROXYADDRESS:$YOURPROXYPORT"
+export HTTP_PROXY="http://$YOURPROXYADDRESS:$YOURPROXYPORT"
+export HTTPS_PROXY="http://$YOURPROXYADDRESS:$YOURPROXYPORT"
+export FTP_PROXY="http://$YOURPROXYADDRESS:$YOURPROXYPORT"
 export NO_PROXY="localhost,127.0.0.1,.svc.cluster.local,$LOCALNET"
 EOF
 echo 'source /etc/environment' > /etc/profile.d/environment.sh
