@@ -18,6 +18,24 @@ function getflag() {
 }
 #getflag "-d"
 
+# 检查变量是否为空
+function check_empty() {
+  local flag=0
+  for var in $@; do
+    if [ -z ${!var} ]; then
+      echo $var is empty
+      flag=1
+    fi
+  done
+  if [ $flag -eq 1 ]; then
+    echo "请按帮助调用"
+    set -- -h
+    parse_cmd $@
+    exit
+  fi
+}
+#check_empty YOURPROXYADDRESS YOURPROXYPORT  INTERFACE
+
 
 # 长选项
 function pl() {
