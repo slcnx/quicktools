@@ -11,20 +11,20 @@
 #********************************************************************
 set -e
 
-# 长选项 
+# 长选项
 function pl() {
     local key=${1##--}
     suffix=":"
-    [ $EMPTY -eq 1 ] && suffix=""
+    [ $has_arg -eq 0 ] && suffix=""
     LONG=${LONG}${key}${suffix},
     echo $LONG
 }
 
-# 短选项 
+# 短选项
 function ps() {
     local key=${1##-}
     suffix=":"
-    [ $EMPTY -eq 1 ] && suffix=""
+    [ $has_arg -eq 0 ] && suffix=""
     SHORT=${SHORT}${key}${suffix}
     echo $SHORT
 }
@@ -40,8 +40,10 @@ IFS=$'\n'
 LONG=""
 SHORT=""
 while read line; do
-  key=$(echo $line | awk '{print $1}')
-  value=$(echo $line | awk '{print $2}')
+  key=$(echo $line | awk -F, '{print $1}' | sed 's/^[[:space:]]\+//' | sed 's/[[:space:]]\+$//')
+  value=$(echo $line | awk -F, '{print $2}' | sed 's/^[[:space:]]\+//' | sed 's/[[:space:]]\+$//')
+  opt_is_empty=$(echo $line | awk -F, '{print $3}' | sed 's/^[[:space:]]\+//' | sed 's/[[:space:]]\+$//' )
+  desc=$(echo $line | awk -F, '{print $4}' | sed 's/^[[:space:]]\+//' | sed 's/[[:space:]]\+$//' )
   if [ "$key" == "key" ]; then
     continue
   fi
@@ -50,30 +52,41 @@ while read line; do
     continue
   fi
 
-  EMPTY=0
+  has_arg=1
   if [ -z "$value" ]; then
-    EMPTY=1
+    has_arg=0
   fi
 
-  array[$key]="${value}"_"$EMPTY"
+
+  if [ -z "$value" ]; then
+    # 需要一个变量.
+    # key -> -d
+    # key -> --delete-it
+    # key -> -d|--delete-it
+    # base64 字符集，[A-Za-z0-9+/]
+    value=$(echo "$key" | base64 | tr -d '[0-9+/]')
+    array[$key]="${value}"/"$has_arg"/"$opt_is_empty"
+  else
+    array[$key]="${value}"/"$has_arg"/"$opt_is_empty"
+  fi
   case $key in
   key)
     continue
     ;;
   *\|*)
-    # 有短长选项
+    # 有短长选项 -d|--delete-it
     short=${key%|*}
     SHORT=$(ps $short)
     long=${key#*|}
     LONG=$(pl $long)
     ;;
   --*)
-    # 1个长选项 , 先匹配长，后匹配短
-    LONG=$(pl $key)
+    # 1个长选项 , 先匹配长，后匹配短 --delete-it
+    LONG=$(pl $key $value)
     ;;
   -*)
-    # 1个短选项
-    SHORT=$(ps $key)
+    # 1个短选项 -d
+    SHORT=$(ps $key $value)
     ;;
   esac
 done <<< "$CONFIG"
@@ -83,13 +96,13 @@ done <<< "$CONFIG"
 #echo  映射
 #echo ${!array[@]}
 #echo ${array[@]}
-#echo $EMPTY
 
 
 
 
 OPTS=`getopt -o h${SHORT} --long help,${LONG} -- "$@"`
 eval set -- "$OPTS"
+#echo $OPTS
 
 casestrings=""
 casestrings+='while true; do case "$1" in '
@@ -98,16 +111,26 @@ for key in ${!array[@]}; do
   #echo k: $key
   # _empty
   #echo v: ${array[$key]}
-  v=${array[$key]%_*}
-  EMPTY=${array[$key]#*_}
-  if [ $EMPTY -eq 1 ]; then
-    casestrings+=" $key) shift ;;"
+  v=$( echo ${array[$key]} | awk -F'/' '{print $1}' )
+  has_arg=$( echo ${array[$key]} | awk -F'/' '{print $2}' )
+  opt_is_empty=$( echo ${array[$key]} | awk -F'/' '{print $3}' )
+  if [ $has_arg -eq 0 ]; then
+    # 默认为0
+    eval ${v}=0
+    # 无参数, 存在选项就为1
+    casestrings+=" $key) ${v}=1; shift ;;"
   else
     casestrings+=" $key) ${v}=\$2;  shift 2 ;;"
   fi
+
 done
 casestrings+=" --)  shift; break ;;"
-casestrings+=" -h|--help)  shift; echo \"\$CONFIG\"; exit 1 ;;"
+function gethelp() {
+   echo "$CONFIG" | awk -F, '{gsub(/[ \t]+/, "", $1);gsub(/[ \t]+/, "", $2);gsub(/[ \t]+/, "", $3);gsub(/[ \t]+/, "", $4);printf "%20s, %20s, %20s, %20s\n",$1,$2,$3,$4}' | sed '1d' | sed '$d'
+}
+casestrings+="
+-h|--help)  shift; gethelp ;exit 1 ;;
+"
 casestrings+='esac; done'
 
 #echo $casestrings
@@ -118,16 +141,19 @@ eval "$casestrings"
 # 要求v不为空
 FLAG=0
 for key in ${!array[@]}; do
-  v=${array[$key]%_*}
-  EMPTY=${array[$key]#*_}
+  v=$( echo ${array[$key]} | awk -F'/' '{print $1}' )
+  has_arg=$( echo ${array[$key]} | awk -F'/' '{print $2}' )
+  opt_is_empty=$( echo ${array[$key]} | awk -F'/' '{print $3}' )
   if [ -z "$v" ]; then
     continue
   fi
-  if [ -z "${!v}" ]; then
+  #$IFACE is empty
+  if [ -z "${!v}" -a $opt_is_empty -eq 0 ]; then
     echo "${key} must have argument"
     FLAG=1
   fi
 done
+
 if [ $FLAG -eq 1 ]; then
   echo "-h|--help 可以获取帮助"
   exit
@@ -137,12 +163,12 @@ fi
 #使用方法
 #source <(curl -sSLf https://gitee.com/slcnx/tools/raw/master/parse_cmd.sh |     sed 's/\r//g')
 #CONFIG='
-#  key        value      desc
-#  -s|--state STATE      MASTER|BACKUP
-#  -i|--iface IFACE      eth0
-#  --route-id ROUTEID    1-255
-#  -p         PRIORITY   0-100
-#  --addr     ADDR       192.168.1.10/24
+#                 key,             argument,         opt_is_empty,                 desc
+#          -s|--state,                STATE,                    0,        MASTER|BACKUP
+#          -i|--iface,                IFACE,                    0,                 eth0
+#          --route-id,              ROUTEID,                    0,                1-255
+#                  -p,             PRIORITY,                    0,                0-100
+#              --addr,                 ADDR,                    0,      192.168.1.10/24
 #'
 #parse_cmd $@
 ## 输出结果
