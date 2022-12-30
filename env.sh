@@ -79,7 +79,7 @@ passwd_6() {
         openssl passwd -6 $1
         openssl passwd -6 $1 -salt 123123
 }
-passwd_6 123456
+#passwd_6 123456
 
 
 rand() {
