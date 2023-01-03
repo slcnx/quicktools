@@ -235,7 +235,7 @@ network:
       nameservers:
         addresses: [$4]
 EOF
-netplan apply
+#netplan apply
 echo "配置成功"
 }
 
