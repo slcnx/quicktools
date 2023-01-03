@@ -681,7 +681,8 @@ sed -i 's/^HISTSIZE=.*$/HISTSIZE=10000/g' /etc/profile
 echo 'export HISTTIMEFORMAT="%F %T `whoami` "' > /etc/profile.d/secuirty.sh
 # 终端超时10分钟
 echo TMOUT=600 >> /etc/profile.d/secuirty.sh
-
+# 时区
+echo 'export TZ=Asia/Shanghai' > /etc/profile.d/tz.sh
 if which apt &> /dev/null; then
 ubuntu_init
 else
