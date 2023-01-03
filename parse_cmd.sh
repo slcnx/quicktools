@@ -18,6 +18,13 @@ function getflag() {
 }
 #getflag "-d"
 
+# 获取flag对应的变量名
+function getflagvar() {
+   local flag=$(echo "$1" | base64 | tr -d '[0-9+/=]')
+   echo ${flag}
+}
+#getflagvar "-d"
+
 # 检查变量是否为空
 function check_empty() {
   local flag=0
@@ -90,7 +97,7 @@ while read line; do
     # key -> --delete-it
     # key -> -d|--delete-it
     # base64 字符集，[A-Za-z0-9+/]
-    value=$(getflag "$key")
+    value=$(getflagvar "$key")
     array[$key]="${value}"/"$has_arg"/"$opt_is_empty"
   else
     array[$key]="${value}"/"$has_arg"/"$opt_is_empty"
