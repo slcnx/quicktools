@@ -84,14 +84,6 @@ root@172:~# bash d.sh
     获取LOCALPORT
     22
     
-    获取REMOTEPORT
-    22
-    
-    获取 -d flag
-    0
-    
-    获取 -v flag
-    0
     ```
     可以看出本地端口变量为22
 
@@ -101,14 +93,6 @@ root@172:~# bash d.sh  --local-port 33
 获取LOCALPORT
 33
 
-获取REMOTEPORT
-22
-
-获取 -d flag
-0
-
-获取 -v flag
-0
 
 ```
 
@@ -128,8 +112,74 @@ root@172:~# bash d.sh --help
 
 4. 查看-r的默认值。
 ```bash
+root@172:~# bash d.sh  --local-port 44
+获取LOCALPORT
+44
+
+获取REMOTEPORT
+22
 
 ``` 
+
+5. 给-r指定值
+```bash
+root@172:~# bash d.sh  --local-port 44 -r 55
+获取LOCALPORT
+44
+
+获取REMOTEPORT
+55
+
+```
+
+6. 查看不传递-d,-v选项时的值
+```bash
+root@172:~# bash d.sh  --local-port 44
+获取LOCALPORT
+44
+
+获取REMOTEPORT
+22
+
+获取 -d flag
+0
+
+获取 -v flag
+0
+
+```
+由于-l必给，所以我们传递一个值
+
+
+7. 查看传递-d,-v选项的值
+```bash
+root@172:~# bash d.sh  --local-port 44  -d -v
+获取LOCALPORT
+44
+
+获取REMOTEPORT
+22
+
+获取 -d flag
+1
+
+获取 -v flag
+1
+
+root@172:~# bash d.sh  --local-port 44  -d
+获取LOCALPORT
+44
+
+获取REMOTEPORT
+22
+
+获取 -d flag
+1
+
+获取 -v flag
+0
+
+```
 
 ##### 给系统添加代理
 ```bash
