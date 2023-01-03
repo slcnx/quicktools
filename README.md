@@ -8,7 +8,7 @@
 
 
 #### 安装教程
-```
+```bash
 git clone https://gitee.com/slcnx/tools
 ```
 
@@ -19,7 +19,7 @@ set +m;shopt -s lastpipe; curl -sSLf https://gitee.com/slcnx/tools/raw/master/in
 ```
 
 ##### 写脚本需要有颜色输出
-```
+```bash
 source <(curl -sSLf https://gitee.com/slcnx/tools/raw/master/env.sh | sed 's/\r//g')
 
 green 123
@@ -32,7 +32,7 @@ color 123 0
 ```
 
 #####  写脚本需要参数解析
-```
+```bash
 source <(curl -sSLf https://gitee.com/slcnx/tools/raw/master/parse_cmd.sh |     sed 's/\r//g')
 CONFIG='
 key,             argument,         opt_is_empty,                 desc
