@@ -11,6 +11,7 @@
 #********************************************************************
 source <(curl -sSLf https://gitee.com/slcnx/tools/raw/master/env.sh | sed 's/\r//g')
 
+: ${WORK_DIR:="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"}
 select opt in $(curl -sSLf https://download.docker.com/linux/static/stable/x86_64/ | sed -E -n 's/.*docker-([0-9.]+).tgz.*/\1/p' | sort -V );do
   echo $(green "获取到版本号: $opt")
   break
@@ -49,5 +50,5 @@ export PATH=/usr/local/docker/bin:$PATH
 docker run --rm hello-world
 
 
-
+cd $WORK_DIR
 rm -f docker-$version.tgz.*
