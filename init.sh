@@ -172,13 +172,15 @@ echo "配置成功"
 # 配置网卡名
 set_ethX() {
 echo "开始配置网卡名"
-sed -Ei.bak '/GRUB_CMDLINE_LINUX=/s/quiet.*$/quiet net.ifnames=0 biosdevname=0"/' /etc/default/grub
+grep -q "net.ifnames=0 biosdevname=0" /etc/default/grub ||  sed -Ei.bak  '/GRUB_CMDLINE_LINUX=/s/"(.*)"$/"\1 net.ifnames=0 biosdevname=0"/' /etc/default/grub
+
 grub2-mkconfig -o /boot/grub2/grub.cfg > /dev/null
 echo "配置成功"
 }
 set_ethX_ubuntu() {
 echo "开始配置网卡名"
-sed -Ei.bak '/GRUB_CMDLINE_LINUX=/s/quiet.*$/quiet net.ifnames=0 biosdevname=0"/' /etc/default/grub
+grep -q "net.ifnames=0 biosdevname=0" /etc/default/grub ||  sed -Ei.bak  '/GRUB_CMDLINE_LINUX=/s/"(.*)"$/"\1 net.ifnames=0 biosdevname=0"/' /etc/default/grub
+
 update-grub
 echo "配置成功"
 }
