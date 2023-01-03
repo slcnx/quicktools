@@ -90,7 +90,7 @@ while read line; do
     # key -> --delete-it
     # key -> -d|--delete-it
     # base64 字符集，[A-Za-z0-9+/]
-    value=$(echo "$key" | base64 | tr -d '[0-9+/]')
+    value=$(getflag "$key")
     array[$key]="${value}"/"$has_arg"/"$opt_is_empty"
   else
     array[$key]="${value}"/"$has_arg"/"$opt_is_empty"
