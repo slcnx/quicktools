@@ -32,24 +32,104 @@ color 123 0
 source <(curl -sSLf https://gitee.com/slcnx/tools/raw/master/parse_cmd.sh |     sed 's/\r//g')
 CONFIG='
 key,             argument,         opt_is_empty,                 desc
-  -l|--local-port , LOCALPORT           ,0,         本地的端口, 3000 or 3000-3020 or 3000,4000
-  -r|--remote-port, REMOTEPORT          ,0,       远程的端口, 3000 or 3000-3020 or 5000,6000
-  -s|--server-addr,  SERVERADDR         ,0,        服务程序的ip/domain huaweicloud.mykernel.cn
-  -b|--bind-port  ,  BINDPORT           ,0,        服务器绑定端口, 7000
-  --dashboard-port,   DASHBOARDPORT     ,0,        7001
-  --dashboard-user,   DASHBOARDUSER     ,0,        admin
-  --dashboard-pwd ,   DASHBOARDUSERPWD  ,0,        123456
-  --suffix ,            NAME            ,1,        指定随机后缀, 可选，默认随机
-  --token  ,            TOKEN           ,1,        指定token, 可选，默认随机
+  -l|--local-port , LOCALPORT           ,0,         本地的端口, 3000 or 3000,4000
+  -r|--remote-port , REMOTEPORT         ,1,         远程的端口, 默认22
+   -d  ,                                ,1,         是否删除？
+   -v|--version,                        ,1,         版本号
 '
 parse_cmd $@
 
-```
-- key 命令行可以传递的选项
-- argument 选项后是否需要接参数？ 有变量表示需要接，没有变量表示不需要接。
-- opt_is_empty 表示这个选项有没有必要传递，一般1表示不需要传递选项，脚本会给默认值。 给0表示必须给选项，不给就会报错。
-- desc 选项的描述
 
+echo 获取LOCALPORT
+echo $LOCALPORT
+echo
+
+echo 获取REMOTEPORT
+: ${REMOTEPORT:=22}
+echo $REMOTEPORT
+echo
+
+echo 获取 -d flag
+deleteflag=$(getflag "-d")
+echo $deleteflag
+echo
+
+echo 获取 -v flag
+showversion=$(getflag "-v|--version")
+echo $showversion
+echo
+```
+- key 命令行可以传递的选项 
+- argument 选项后是否需要接参数？ 有变量表示 选项需要接值，没有变量表示选项不需要接值。 
+  - 存在选项参数时，获取选项的值：使用变量。 示例：bash d.sh -l 22
+  - 不存在选项参数时， 获取选项对应的值，通过 命令获取变量的值 $(getflag "-d")  示例：bash d.sh -l 22 -d
+- opt_is_empty 表示这个选项有没有必要传递，
+  - 1 表示不需要传递选项; 
+    - 当存在选项参数时，不传递选项，需要脚本给默认值。: ${REMOTEPORT:=22} 示例：bash d.sh -l 22 或  bash d.sh -l 22 -r 33
+    - 当不存在选项参数时，不传递选项，默认0 示例: root@172:~# bash d.sh -l 22 或 bash d.sh -l 22  -d
+  - 0 表示必须给选项，不给就会报错。  示例：bash d.sh
+- desc 选项的描述 示例：bash d.sh -h
+
+1. 不给选项，脚本会提示需要选项
+```bash
+root@172:~# bash d.sh
+-l|--local-port must have argument
+-h|--help 可以获取帮助
+```
+
+2. 给一个必给选项 -l 22
+- 短选项
+    ```bash
+    root@172:~# bash d.sh  -l 22
+    获取LOCALPORT
+    22
+    
+    获取REMOTEPORT
+    22
+    
+    获取 -d flag
+    0
+    
+    获取 -v flag
+    0
+    ```
+    可以看出本地端口变量为22
+
+- 长选项
+```bash
+root@172:~# bash d.sh  --local-port 33
+获取LOCALPORT
+33
+
+获取REMOTEPORT
+22
+
+获取 -d flag
+0
+
+获取 -v flag
+0
+
+```
+
+3. 查看帮助
+```bash
+root@172:~# bash d.sh --help
+                 key,             argument,         opt_is_empty,                 desc
+     -l|--local-port,            LOCALPORT,                    0,                本地的端口
+    -r|--remote-port,           REMOTEPORT,                    1,                远程的端口
+                  -d,                     ,                    1,                是否删除？
+        -v|--version,                     ,                    1,                  版本号
+
+```
+可以看出
+有参数的：-l必给，-r|--remote-port 可选的。说明脚本需要给变量 REMOTEPORT 默认值。
+无参数的：-d,-v可选的。说明脚本自动生成变量，存在为1。不存在为0
+
+4. 查看-r的默认值。
+```bash
+
+``` 
 
 ##### 给系统添加代理
 ```bash
