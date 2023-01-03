@@ -4,7 +4,7 @@
 #Author:                songliangcheng
 #QQ:                    2192383945
 #Date:                  2023-01-03 11:08:58
-#FileName：             curl -sSLf https://gitee.com/slcnx/tools/raw/master/install-docker.sh | sed 's/\r//g' | bash
+#FileName：             shopt -s lastpipe; curl -sSLf https://gitee.com/slcnx/tools/raw/master/install-docker.sh | sed 's/\r//g' | script="$(</dev/stdin)"; eval "$script"
 #URL:                   http://blog.mykernel.cn
 #Description：          a test script
 #Copyright (C):        2023 All rights reserved
@@ -45,7 +45,7 @@ systemctl enable docker
 
 color "安装docker" 0
 
-export PATH=/usr/local/docker/bin
+export PATH=/usr/local/docker/bin:$PATH
 docker run --rm hello-world
 
 
