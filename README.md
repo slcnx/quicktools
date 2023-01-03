@@ -13,6 +13,10 @@ git clone https://gitee.com/slcnx/tools
 ```
 
 #### 使用说明
+##### 一键安装docker
+```bash
+set +m;shopt -s lastpipe; curl -sSLf https://gitee.com/slcnx/tools/raw/master/install-docker.sh | sed 's/\r//g' | script="$(</dev/stdin)"; eval "$script"
+```
 
 ##### 写脚本需要有颜色输出
 ```
