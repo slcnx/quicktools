@@ -690,6 +690,7 @@ centos_init
 fi
 cat << EOF
 # reboot
+curl -sSLf https://gitee.com/slcnx/tools/raw/master/check_network.sh | sed 's/\r//g' | bash 
 请reboot, 验证ip, 域名解析, kernel params, crontab, ssh, alias
 EOF
 
