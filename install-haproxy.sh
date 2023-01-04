@@ -57,8 +57,8 @@ listen stats    #启动web监控
 listen http
   bind $BINDIP
   mode http
-  server web1 $WEB1  inter 3s fall 3 rise 5
-  server web2 $WEB2  inter 3s fall 3 rise 5
+  server web1 $WEB1 check inter 3s fall 3 rise 5
+  server web2 $WEB2 check inter 3s fall 3 rise 5
 EOF
 
 systemctl restart haproxy
