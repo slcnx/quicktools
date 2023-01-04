@@ -51,4 +51,4 @@ docker run --rm hello-world
 
 
 cd $WORK_DIR
-rm -f docker-$version.tgz.*
+rm -f docker-$version.tgz*
