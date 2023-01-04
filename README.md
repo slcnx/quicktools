@@ -18,6 +18,20 @@ git clone https://gitee.com/slcnx/tools
 set +m;shopt -s lastpipe; curl -sSLf https://gitee.com/slcnx/tools/raw/master/install-docker.sh | sed 's/\r//g' | script="$(</dev/stdin)"; eval "$script"
 ```
 
+
+
+##### docker添加代理
+
+```bash
+# 添加代理
+curl -sSLf https://gitee.com/slcnx/tools/raw/master/add-docker-proxy.sh |  sed 's/\r//g' | bash -xs -- -a 192.168.13.103:33000
+systemctl show --property=Environment docker
+
+# 删除代理
+curl -sSLf https://gitee.com/slcnx/tools/raw/master/add-docker-proxy.sh |  sed 's/\r//g' | bash -xs -- -d
+```
+
+
 ##### 写脚本需要有颜色输出
 ```bash
 source <(curl -sSLf https://gitee.com/slcnx/tools/raw/master/env.sh | sed 's/\r//g')
